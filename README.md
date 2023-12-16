@@ -75,4 +75,4 @@ A mapping tool for mablet players to better fit the arc of their wrist and repli
     Default: 0
     The rotation of the area in degrees.
 
-*assuming you know what a mablet is of course*
+*assuming you know what a mablet is of course.*
