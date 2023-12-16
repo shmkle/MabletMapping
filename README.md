@@ -8,11 +8,16 @@
 ### The purpose:
 A mapping tool for mablet players to better fit the arc of their wrist and replicate their old mouse settings.
 
-### The Values:
 
+
+### Setup and Values:
+
+**OTD Area:**
+
+    Set your area to full area with no rotation. 
+    Example:
 ![](./Images/area_example.png)
 
-### The Values:
 
 **Wirst Radius:**
 
