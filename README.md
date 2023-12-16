@@ -14,8 +14,8 @@ A mapping tool for mablet players to better fit the arc of their wrist and repli
 
 **OTD Area:**
 
-    Set your area to full area with no rotation. 
-    Example:
+Set your area to full area with no rotation. 
+Example:
 ![](./Images/area_example.png)
 
 
