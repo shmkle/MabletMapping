@@ -15,6 +15,9 @@ A mapping tool for mablet players to better fit the arc of their wrist and repli
     Default: 5.0
     The radius of your wrist in inches.
     Fine-tune this value so that making a sweeping horizontal motion with your wrist creates a straight line.
+    u-Shape == radius set too low, increase value
+    n-Shape == radius set too high, reduce value
+    flat line == radius set perfectly
 
 
 **Sensor Offset:** 
@@ -32,8 +35,9 @@ A mapping tool for mablet players to better fit the arc of their wrist and repli
 
 **X/Y Ratio:** 
 
-    Default: 800
-    DPI of your mouse.
+    Default: 1.0
+    The aspect ratio of your DPI. 
+    Higher means faster up-down movements.
 
 
 **Sensitivity:** 
