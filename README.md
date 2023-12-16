@@ -3,11 +3,11 @@
 [![](https://img.shields.io/github/downloads/shmkle/MabletMapping/total.svg)](https://github.com/shmkle/MabletMapping/releases/latest)
 
 *Meant for [OpenTabletDriver](https://github.com/OpenTabletDriver/OpenTabletDriver)*
+*assuming you know what a mablet is of course.*
 
 
 ### The purpose:
 A mapping tool for mablet players to better fit the arc of their wrist and replicate their old mouse settings.
-
 
 
 ### Setup and Values:
@@ -88,4 +88,3 @@ Example:
     Default: 0
     The rotation of the area in degrees.
 
-*assuming you know what a mablet is of course.*
