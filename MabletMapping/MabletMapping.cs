@@ -17,36 +17,41 @@ public class MabletMapping : IPositionedPipelineElement<IDeviceReport>
     [Property("Wirst Radius"), DefaultPropertyValue(5.0f), Unit("in"), ToolTip
     (
         "Default: 5.0\n\n" +
-        "Radius of your wrist in intches"
+        "The radius of your wrist in inches.\n" +
+        "Fine-tune this value so that making a sweeping horizontal motion with your wrist creates a straight line.\n" +
+        "u-Shape == radius set too low, increase value\n" +
+        "n-Shape == radius set too high, reduce value\n" +
+        "flat line == radius set perfectly"
     )]
     public float wRadius { get; set; }
 
     [Property("Sensor Offset"), DefaultPropertyValue(0.0f), Unit("in"), ToolTip
     (
         "Default: 0.0\n\n" +
-        "Offset from the would be sensor to the pen tip in intches\n\n" +
-        "Change this if you didn't put the pen right above where the sensor should go"
+        "Offset from the would-be sensor to the pen tip in inches.\n" +
+        "Change this if you did not put the pen right above where the sensor should go."
     )]
     public float sOffset { get; set; }
 
     [Property("DPI"), DefaultPropertyValue(800), ToolTip
     (
         "Default: 800\n\n" +
-        "DPI of your mouse"
+        "DPI of your mouse."
     )]
     public int dpiX { get; set; }
 
     [Property("X/Y Ratio"), DefaultPropertyValue(1.0f), ToolTip
     (
         "Default: 1.0\n\n" +
-        "Aspect ratio of your DPI, higher means faster up to down movements."
+        "Aspect ratio of your DPI.\n" + 
+        "Higher means faster up to down movements."
     )]
     public float ratio { get; set; }
 
-    [Property("Sensitivity Multiplier"), DefaultPropertyValue(1.0f), ToolTip
+    [Property("Sensitivity"), DefaultPropertyValue(1.0f), ToolTip
     (
         "Default: 1.0\n\n" +
-        "Multiplies the X DPI and Y DPI values\n\n" +
+        "Multiplies the DPI value.\n\n" +
         "Windows pointer speeds:\n" +
         "0.03125 (1st tick)\n" +
         "0.0625 (2nd tick)\n" +
@@ -65,21 +70,21 @@ public class MabletMapping : IPositionedPipelineElement<IDeviceReport>
     [Property("Area Position X"), DefaultPropertyValue(50), Unit("%"), ToolTip
     (
         "Default: 50\n\n" +
-        "The X postion of the areas center in percentage across the tablet"
+        "The X position of the area's center in percentage across the tablet."
     )]
     public int aposx { get; set; }
 
     [Property("Area Position Y"), DefaultPropertyValue(50), Unit("%"), ToolTip
 (
     "Default: 50\n\n" +
-    "The Y postion of the areas center in percentage across the tablet"
+    "The Y position of the area's center in percentage across the tablet."
 )]
     public int aposy { get; set; }
 
     [Property("Area Rotation"), DefaultPropertyValue(0), Unit("°"), ToolTip
     (
         "Default: 0\n\n" +
-        "The rotation of the area in degrees"
+        "The rotation of the area in degrees."
     )]
     public int arot { get; set; }
 
