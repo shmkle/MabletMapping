@@ -10,6 +10,10 @@ A mapping tool for mablet players to better fit the arc of their wrist and repli
 
 ### The Values:
 
+![](./images/area_example.png)
+
+### The Values:
+
 **Wirst Radius:**
 
     Default: 5.0
