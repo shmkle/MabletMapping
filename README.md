@@ -4,7 +4,7 @@
 
 *Meant for [OpenTabletDriver](https://github.com/OpenTabletDriver/OpenTabletDriver)*
 
-*assuming you know what a mablet is of course.*
+*Assuming you know what a mablet is of course.*
 
 
 ### The purpose:
