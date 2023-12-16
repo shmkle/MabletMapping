@@ -14,7 +14,7 @@ A mapping tool for mablet players to better fit the arc of their wrist and repli
 
     Default: 5.0
     The radius of your wrist in inches.
-    Fine-tune this value so making a sweeping motion with your wrist creates a straight line.
+    Fine-tune this value so that making a sweeping horizontal motion with your wrist creates a straight line.
 
 
 **Sensor Offset:** 
