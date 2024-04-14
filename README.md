@@ -15,8 +15,8 @@ A mapping tool for mablet players to better fit the arc of their wrist and repli
 
 **OTD Area:**
 
-Set your area to Absolute Mode, full area, and with 0 rotation. 
-Example:
+Make sure to keep your area on Absolute Mode. 
+Example Setup:
 ![](./Images/area_example.png)
 
 
@@ -66,26 +66,3 @@ Example:
     2.5 (9th tick)
     3.0 (10th tick)
     3.5 (11th tick)
-
-
- **Area Position X:** 
-
-    Default: 50
-    The X position of the area's center in percentage across the tablet.
-    0% = left side of your tablet.
-    100% = right side of your tablet.
-
-
- **Area Position Y:** 
-
-    Default: 50
-    The Y position of the area's center in percentage across the tablet.
-    0% = bottom of your tablet
-    100% = top of your tablet
-
-
- **Area Rotation:** 
-
-    Default: 0
-    The rotation of the area in degrees.
-
