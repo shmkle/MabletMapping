@@ -2,7 +2,6 @@ using OpenTabletDriver;
 using OpenTabletDriver.Plugin;
 using OpenTabletDriver.Plugin.Attributes;
 using OpenTabletDriver.Plugin.DependencyInjection;
-using OpenTabletDriver.Plugin.Devices;
 using OpenTabletDriver.Plugin.Output;
 using OpenTabletDriver.Plugin.Tablet;
 using System.Numerics;
@@ -14,18 +13,18 @@ public class MabletMapping : IPositionedPipelineElement<IDeviceReport>
 
     public event Action<IDeviceReport>? Emit;
 
-    [Property("Wirst Radius"), DefaultPropertyValue(5.0f), Unit("in"), ToolTip
+    [Property("Wrist Radius"), DefaultPropertyValue(5f), Unit("in"), ToolTip
     (
         "Default: 5.0\n\n" +
         "The radius of your wrist in inches.\n" +
         "Fine-tune this value so that making a sweeping horizontal motion with your wrist creates a straight line.\n" +
-        "u-Shape == radius set too low, increase value\n" +
-        "n-Shape == radius set too high, reduce value\n" +
+        "u-shape == radius set too low, increase value\n" +
+        "n-shape == radius set too high, reduce value\n" +
         "flat line == radius set perfectly"
     )]
     public float wRadius { get; set; }
 
-    [Property("Sensor Offset"), DefaultPropertyValue(0.0f), Unit("in"), ToolTip
+    [Property("Sensor Offset"), DefaultPropertyValue(0f), Unit("in"), ToolTip
     (
         "Default: 0.0\n\n" +
         "Offset from the would-be sensor to the pen tip in inches.\n" +
@@ -40,15 +39,15 @@ public class MabletMapping : IPositionedPipelineElement<IDeviceReport>
     )]
     public int dpiX { get; set; }
 
-    [Property("X/Y Ratio"), DefaultPropertyValue(1.0f), ToolTip
+    [Property("X/Y Ratio"), DefaultPropertyValue(1f), ToolTip
     (
         "Default: 1.0\n\n" +
-        "Aspect ratio of your DPI.\n" + 
+        "Aspect ratio of your DPI.\n" +
         "Higher means faster up to down movements."
     )]
     public float ratio { get; set; }
 
-    [Property("Sensitivity"), DefaultPropertyValue(1.0f), ToolTip
+    [Property("Sensitivity"), DefaultPropertyValue(1f), ToolTip
     (
         "Default: 1.0\n\n" +
         "Multiplies the DPI value.\n\n" +
@@ -67,92 +66,55 @@ public class MabletMapping : IPositionedPipelineElement<IDeviceReport>
     )]
     public float sens { get; set; }
 
-    [Property("Area Position X"), DefaultPropertyValue(50), Unit("%"), ToolTip
-    (
-        "Default: 50\n\n" +
-        "The X position of the area's center in percentage across the tablet."
-    )]
-    public int aposx { get; set; }
-
-    [Property("Area Position Y"), DefaultPropertyValue(50), Unit("%"), ToolTip
-(
-    "Default: 50\n\n" +
-    "The Y position of the area's center in percentage across the tablet."
-)]
-    public int aposy { get; set; }
-
-    [Property("Area Rotation"), DefaultPropertyValue(0), Unit("°"), ToolTip
-    (
-        "Default: 0\n\n" +
-        "The rotation of the area in degrees."
-    )]
-    public int arot { get; set; }
-
-    public float mmpi = 25.4f;
-
     public void Consume(IDeviceReport value)
     {
-        if (TabletReference == null)
-        {
-            Log.Debug("MabletMapping", "tablet refrence does not exist");
-            return;
-        }
+        if (AbsoluteOutput == null) ResolveOutputMode();
+        if (value is not ITabletReport report || TabletReference == null || AbsoluteOutput == null) return;
 
-        if (absoluteOutput == null)
-        {
-            ResolveOutputMode();
-            return;
-        }
+        float x = report.Position.X, y = report.Position.Y;
+        var digitizer = TabletReference.Properties.Specifications.Digitizer;
+        Area output = AbsoluteOutput.Output;
+        Area input = AbsoluteOutput.Input;
+        float upmm = digitizer.MaxX / digitizer.Width;
+        float upi = mmpi * upmm;
 
-        if (value is ITabletReport report)
-        {
-            var digitizer = TabletReference.Properties.Specifications.Digitizer;
+        float mx = input.Width * upmm, my = input.Height * upmm;
+        float ax = input.Position.X * upmm, ay = input.Position.Y * upmm;
+        float rot = input.Rotation * rpd;
 
-            float resx = absoluteOutput.Output.Width;
-            float resy = absoluteOutput.Output.Height;
-            float mx = digitizer.MaxX;
-            float my = digitizer.MaxY;
-            float upmm = mx / digitizer.Width;
+        float radius = wRadius * upi;
+        float offset = (wRadius + sOffset) * upi;
 
-            float rot = arot / 180.0f * MathF.PI;
-            float ax = aposx / 100.0f * mx;
-            float ay = aposy / 100.0f * my;
+        float mousex = dpiX * sens / upi;
+        float mousey = mousex * ratio;
 
-            float radius = wRadius * mmpi * upmm;
-            float offset = (wRadius + sOffset) * mmpi * upmm;
-            float dpiY = dpiX * ratio;
+        float cosAngle = MathF.Cos(rot), sinAngle = MathF.Sin(rot);
 
-            float mousex = dpiX * sens / mmpi;
-            float mousey = dpiY * sens / mmpi;
+        float changex = x - (ax - sinAngle * offset);
+        float changey = y - (ay + cosAngle * offset);
 
-            float x = report.Position.X;
-            float y = report.Position.Y;
+        float outputX = MathF.Atan((changey * sinAngle - changex * cosAngle) / (changey * cosAngle + changex * sinAngle)) * radius * mousex / output.Width * mx;
+        float outputY = (offset - MathF.Sqrt(changex * changex + changey * changey)) * mousey / output.Height * my;
 
-            float changex = x - (ax + MathF.Sin(-rot) * offset);
-            float changey = y - (ay + MathF.Cos(-rot) * offset);
+        report.Position = new Vector2(
+            ax + outputX * cosAngle - outputY * sinAngle,
+            ay + outputX * sinAngle + outputY * cosAngle
+        );
 
-            float outputX = mx * (0.5f + MathF.Atan((changey * MathF.Sin(rot) - changex * MathF.Cos(rot)) / (changey * MathF.Cos(rot) + changex * MathF.Sin(rot))) * radius / upmm * mousex / resx);
-            float outputY = my * (0.5f + (offset - MathF.Pow(MathF.Pow(changex, 2.0f) + MathF.Pow(changey, 2.0f), 0.5f)) / upmm * mousey / resy);
-
-            report.Position = new Vector2
-            (
-                outputX,
-                outputY
-            );
-
-            value = report;
-        }
-
+        value = report;
         Emit?.Invoke(value);
     }
+
+    private float rpd = MathF.PI / 180f;
+    private float mmpi = 25.4f;
 
     [TabletReference]
     public TabletReference? TabletReference { get; set; }
 
     [Resolved]
     public IDriver? driver;
-    private AbsoluteOutputMode? absoluteOutput;
-    private void ResolveOutputMode()
+    public AbsoluteOutputMode? AbsoluteOutput;
+    public void ResolveOutputMode()
     {
         if (driver is Driver drv)
         {
@@ -162,14 +124,9 @@ public class MabletMapping : IPositionedPipelineElement<IDeviceReport>
 
             if (output is AbsoluteOutputMode abs_output)
             {
-                absoluteOutput = abs_output;
+                AbsoluteOutput = abs_output;
                 return;
             }
         }
-    }
-
-    public IEnumerable<IDeviceEndpoint> GetDevices()
-    {
-        throw new NotImplementedException();
     }
 }
