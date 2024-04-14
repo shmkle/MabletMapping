@@ -4,9 +4,6 @@
 
 *Meant for [OpenTabletDriver](https://github.com/OpenTabletDriver/OpenTabletDriver)*
 
-*Assuming you know what a mablet is of course.*
-
-
 ### The purpose:
 A mapping tool for mablet players to better fit the arc of their wrist and replicate their old mouse settings.
 
@@ -22,8 +19,6 @@ A mapping tool for mablet players to better fit the arc of their wrist and repli
 ![](./Images/disassembled_example.png)
 
 </details>
-
-
 
 ### Setup and Values:
 
