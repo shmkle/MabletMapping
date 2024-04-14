@@ -16,6 +16,11 @@ A mapping tool for mablet players to better fit the arc of their wrist and repli
 ![](./Images/mablet_example.png)
 
 </details>
+<summary>Example Disassembled:</summary>
+
+![](./Images/disassembled_example.png)
+
+</details>
 
 
 
