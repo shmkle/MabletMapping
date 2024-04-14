@@ -15,7 +15,8 @@ A mapping tool for mablet players to better fit the arc of their wrist and repli
 
 **OTD Area:**
 
-Make sure to keep your area on Absolute Mode. 
+Make sure to keep your area on Absolute Mode and only move and rotate, do not scale. 
+
 Example Setup:
 ![](./Images/area_example.png)
 
