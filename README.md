@@ -17,8 +17,12 @@ A mapping tool for mablet players to better fit the arc of their wrist and repli
 
 Make sure to keep your area on Absolute Mode and only move and rotate, do not scale (scaling may affect follow radius shinanigans in filters used). 
 
-Example Setup:
+<details>
+<summary>Example Setup:</summary>
+
 ![](./Images/area_example.png)
+
+</details>
 
 
 **Wirst Radius:**
