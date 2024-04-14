@@ -10,6 +10,14 @@
 ### The purpose:
 A mapping tool for mablet players to better fit the arc of their wrist and replicate their old mouse settings.
 
+<details>
+<summary>Example Mablet:</summary>
+
+![](./Images/mablet_example.png)
+
+</details>
+
+
 
 ### Setup and Values:
 
