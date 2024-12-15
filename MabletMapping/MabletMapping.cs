@@ -69,7 +69,7 @@ public class MabletMapping : IPositionedPipelineElement<IDeviceReport>
     public void Consume(IDeviceReport value)
     {
         if (AbsoluteOutput == null) ResolveOutputMode();
-        if (value is not ITabletReport report || TabletReference == null || AbsoluteOutput == null) return;
+        if (value is not IAbsolutePositionReport report || TabletReference == null || AbsoluteOutput == null) return;
 
         float x = report.Position.X, y = report.Position.Y;
         var digitizer = TabletReference.Properties.Specifications.Digitizer;
