@@ -69,39 +69,42 @@ public class MabletMapping : IPositionedPipelineElement<IDeviceReport>
     public void Consume(IDeviceReport value)
     {
         if (AbsoluteOutput == null) ResolveOutputMode();
-        if (value is not IAbsolutePositionReport report || TabletReference == null || AbsoluteOutput == null) return;
 
-        float x = report.Position.X, y = report.Position.Y;
-        var digitizer = TabletReference.Properties.Specifications.Digitizer;
-        Area output = AbsoluteOutput.Output;
-        Area input = AbsoluteOutput.Input;
-        float upmm = digitizer.MaxX / digitizer.Width;
-        float upi = mmpi * upmm;
+        if (value is IAbsolutePositionReport report && TabletReference != null && AbsoluteOutput != null) {
+            float x = report.Position.X, y = report.Position.Y;
+            var digitizer = TabletReference.Properties.Specifications.Digitizer;
+            Area output = AbsoluteOutput.Output;
+            Area input = AbsoluteOutput.Input;
+            float upmm = digitizer.MaxX / digitizer.Width;
+            float upi = mmpi * upmm;
 
-        float mx = input.Width * upmm, my = input.Height * upmm;
-        float ax = input.Position.X * upmm, ay = input.Position.Y * upmm;
-        float rot = input.Rotation * rpd;
+            float mx = input.Width * upmm, my = input.Height * upmm;
+            float ax = input.Position.X * upmm, ay = input.Position.Y * upmm;
+            float rot = input.Rotation * rpd;
 
-        float radius = wRadius * upi;
-        float offset = (wRadius + sOffset) * upi;
+            float radius = wRadius * upi;
+            float offset = (wRadius + sOffset) * upi;
 
-        float mousex = dpiX * sens / upi;
-        float mousey = mousex * ratio;
+            float mousex = dpiX * sens / upi;
+            float mousey = mousex * ratio;
 
-        float cosAngle = MathF.Cos(rot), sinAngle = MathF.Sin(rot);
+            float cosAngle = MathF.Cos(rot);
+            float sinAngle = MathF.Sin(rot);
 
-        float changex = x - (ax - sinAngle * offset);
-        float changey = y - (ay + cosAngle * offset);
+            float changex = x - (ax - sinAngle * offset);
+            float changey = y - (ay + cosAngle * offset);
 
-        float outputX = MathF.Atan((changey * sinAngle - changex * cosAngle) / (changey * cosAngle + changex * sinAngle)) * radius * mousex / output.Width * mx;
-        float outputY = (offset - MathF.Sqrt(changex * changex + changey * changey)) * mousey / output.Height * my;
+            float outputX = MathF.Atan((changey * sinAngle - changex * cosAngle) / (changey * cosAngle + changex * sinAngle)) * radius * mousex / output.Width * mx;
+            float outputY = (offset - MathF.Sqrt(changex * changex + changey * changey)) * mousey / output.Height * my;
 
-        report.Position = new Vector2(
-            ax + outputX * cosAngle - outputY * sinAngle,
-            ay + outputX * sinAngle + outputY * cosAngle
-        );
+            report.Position = new Vector2(
+                ax + outputX * cosAngle - outputY * sinAngle,
+                ay + outputX * sinAngle + outputY * cosAngle
+            );
 
-        value = report;
+            value = report;
+        }
+
         Emit?.Invoke(value);
     }
 
